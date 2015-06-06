@@ -21,29 +21,39 @@ def log(msg):
 
 @app.route('/logout', methods=['POST', 'OPTIONS'])
 
-def logout():    
+def logout():
+	info = dict()
 	session.clear()
 
-	info = {"status":"Logged out"}]
-	return Response(json.dumps(info), mimetype="application/json'
+	info = {"status":"Logged out"}
+	return Response(json.dumps(info), mimetype="application/json")
+
+@app.route('/', methods=['GET', 'OPTIONS'])
+def hello():
+	info = dict()
+	info = {"status":"hello"}
+	return Response(json.dumps(info), mimetype="application/json")
 
 @app.route('/login', methods=['POST', 'OPTIONS'])
 def login():
 	params  = json.loads(json.dumps(request.json))
 	
+	con = mysql.connect()
+	cursor = con.cursor()
+	info = dict()
+
 	owner_name=params['owner']
 	stmt = "SELECT restaurant_id, owner FROM RESTAURANT where owner=%s"
 	input=(owner_name);
 	cursor.execute(stmt, input)
 	data = cursor.fetchall()		
 	if data is NONE:
- 		info = {"status":"Log in failed.}]
-		return Response(json.dumps(info),  mimetype='application/json'
+ 		info = {"status":"Log in failed."}
 	else:
-		info = {"status":"Logged in Successfully}]
+		info = {"status":"Logged in Successfully"}
 		session['owner']=owner_name
 		session['restaurant_id']=restaurant_id
-		return Response(json.dumps(info), mimetype="application/json'
+	return Response(json.dumps(info), mimetype="application/json")
 	
 @app.route('/restaurant', methods=['POST', 'OPTIONS'])
 def restaurant():
@@ -114,7 +124,7 @@ def chef():
 	con.close()
 	return Response(json.dumps(info),  mimetype='application/json')
 
-@app.route('/chefs/<str:chef_id>', methods=['GET', 'OPTIONS'])
+@app.route('/chefs/<chef_id>', methods=['GET', 'OPTIONS'])
 def chefname():
 	params  = json.loads(json.dumps(request.json))
 

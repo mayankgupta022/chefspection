@@ -34,7 +34,7 @@ define(function (require) {
             $('#msg').html('');
 
             this.model.attributes.order_no = $('#order_no', this.$el).val();
-            this.model.attributes.chef_name = $('#chef_name', this.$el).val();
+            this.model.attributes.chef_id = $('#chef_id', this.$el).val();
 
             this.model.save(null,{
                 success: function (data) {

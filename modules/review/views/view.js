@@ -33,7 +33,7 @@ define(function (require) {
 
             $('#msg').html('');
 
-            this.model.attributes.order = $('#order', this.$el).val();
+            this.model.attributes.order_no = $('#order_no', this.$el).val();
             this.model.attributes.restaurant_id = $('#restaurant_id', this.$el).val();
             this.model.attributes.feedback = $('#feedback', this.$el).val();
 

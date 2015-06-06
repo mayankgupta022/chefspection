@@ -1,0 +1,18 @@
+<div id="login" class="form">
+	<div class="row">
+		<label class="col-xs-4">Order No.</label>
+		<input type="text" class="col-xs-8" <% if(typeof order_no!== 'undefined') { %> value="<%= order_no %>" <% } %> name="order_no" id="order_no"/>
+	</div>
+	<div class="row">
+		<label class="col-xs-4">Chef</label>
+		<input type="text" class="col-xs-8" name="chef_name" id="chef_name"/>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-xs-12">
+			<button type="submit" class="btn btn-primary" id="submit">Save</button>
+			<button type="reset" class="btn btn-primary" id="reset">Reset</button>
+		</div>
+	</div>
+	<div id="msg"></div>
+</div>

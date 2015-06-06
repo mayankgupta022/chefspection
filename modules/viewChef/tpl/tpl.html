@@ -1,0 +1,32 @@
+<div id="noteDetails" class="form">
+	<div class="row">
+		<label class="col-xs-4">Chef</label>
+		<label class="col-xs-8"><%= chef_name %></label>
+	</div>
+	<div class="row">
+		<label class="col-xs-4">Rating</label>
+		<label class="col-xs-8"><%= rating %></label>
+	</div>
+	<div class="row">
+		<label class="col-xs-4">Reviews</label>
+		<div class="col-xs-8">
+			<ul>
+		<% _.each(feedback, function(model) { %>
+			<li>
+				<div class="col-xs-6">
+					<%= model.feedback %>
+				</div>
+				<label class="col-xs-6">
+					<%= model.rating %>
+				</label>
+			</li>
+		<% }); %>
+	</ul>
+		</div>
+	</div>
+	<div class="row">
+		<button type="submit" class="btn btn-primary" id="submit">Save</button>
+		<button type="delete" class="btn btn-primary" id="delete">Delete</button>
+	</div>
+	<div id="msg"></div>
+</div>

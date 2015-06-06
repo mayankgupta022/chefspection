@@ -1,0 +1,23 @@
+body {
+    font-family: source-sans-pro, sans-serif;
+    font-size: 15px;
+    background-color: #fefefe;
+    padding-top: 60px;
+    padding-bottom: 40px;
+    margin: auto;
+}
+
+.my-menu {
+	padding-top: 10px;
+}
+
+
+#content {
+    padding: 50px;
+    padding-bottom: 50px;
+    text-align: left;
+}
+
+#notesList {
+	text-align: left;
+}

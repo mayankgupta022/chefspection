@@ -1,0 +1,22 @@
+<div id="login" class="form">
+	<div class="row">
+		<label class="col-xs-4">Order No.</label>
+		<input type="text" class="col-xs-8" <% if(typeof order!== 'undefined') { %> value="<%= order %>" <% } %> name="order" id="order"/>
+	</div>
+	<div class="row">
+		<label class="col-xs-4">Restaurant</label>
+		<input type="text" class="col-xs-8" <% if(typeof restaurant_id!== 'undefined') { %> value="<%= restaurant_id %>" <% } %> name="restaurant_id" id="restaurant_id"/>
+	</div>
+	<div class="row">
+		<label class="col-xs-4">Feedback</label>
+		<textarea class="col-xs-8" name="feedback" id="feedback"><% if(typeof feedback!== 'undefined') { %><%= feedback %><% } %></textarea>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-xs-12">
+			<button type="submit" class="btn btn-primary" id="submit">Save</button>
+			<button type="reset" class="btn btn-primary" id="reset">Reset</button>
+		</div>
+	</div>
+	<div id="msg"></div>
+</div>

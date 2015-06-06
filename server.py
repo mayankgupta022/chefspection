@@ -36,9 +36,6 @@ def logout():
 	info = {"status":"Logged out"}
 	return Response(json.dumps(info), mimetype="application/json")
 
-# response = alchemyapi.entities('text', params['text'], {'sentiment': 1})
-
-
 @app.route('/', methods=['GET', 'OPTIONS'])
 def hello():
 	info = dict()
@@ -54,7 +51,6 @@ def login():
 	info = dict()
 
 	if request.method == 'POST':
-		# log(json.stringify(params))
 		restaurant_name=params['restaurant_name']
 		stmt = "SELECT restaurant_id, owner FROM RESTAURANTS where restaurant_name=%s"
 		input=(restaurant_name);
@@ -79,7 +75,7 @@ def restaurant():
 	info = dict()
 
 	if request.method == 'GET':
-		stmt = "SELECT restaurant_id, restaurant_name, owner FROM RESTAURANT"
+		stmt = "SELECT restaurant_id, restaurant_name, owner FROM RESTAURANTS"
 		cursor.execute(stmt)
 		data = cursor.fetchall()		
 		info = [{"restaurant_id" : item[0], "restaurant_name": item[1], "owner": item[2]} for item in data]
@@ -111,7 +107,7 @@ def review():
 		feedback = params['feedback']
 		response = alchemyapi.sentiment('text', params['feedback'])
 		
-		rating = Decimal(response["docSentiment"]["score"].strip(' "'))*10
+		rating = (Decimal(response["docSentiment"]["score"].strip(' "')) + 1)*5
 		log(str(rating))
 		stmt = "UPDATE FEEDBACK SET feedback =%s, rating =%s where order_no=%s and restaurant_id=%s"
 		data = (feedback, rating, order_no, restaurant_id)
@@ -177,7 +173,6 @@ def chefname(chef_id):
 		input = (chef_id)
 		cursor.execute(stmt, input)
 		data = cursor.fetchall()
-		log(str(data))
 		if data is None or len(data) == 0:
 			stmt = "SELECT chef_name, rating FROM CHEFS where chef_id = %s"
 			input = (chef_id)
@@ -230,7 +225,6 @@ def chefs():
 		info = {"status": 1}
 
 	else:
-		log(str(session['restaurant_id']))
 		restaurant_id = session['restaurant_id']
 		stmt = "SELECT c.chef_id, c.chef_name, c.rating from CHEFS as c where c.restaurant_id=%s"
 		input = (restaurant_id)

@@ -6,7 +6,7 @@ define(function (require) {
         
     return Backbone.Collection.extend({
 
-    	url: document.serverURL + 'notes'
+    	url: document.serverURL + 'restaurant'
     });
 
 });

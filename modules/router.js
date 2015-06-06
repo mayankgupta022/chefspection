@@ -12,9 +12,10 @@ define(function (require) {
     return Backbone.Router.extend({
 
         routes: {
-            "": "chefs",
+            "": "login",
             "chefs": "chefs",
             "login": "login",
+            "logout": "logout",
             "restaurant": "restaurant",
             "review": "review",
             "chef/new": "newChef",
@@ -59,6 +60,16 @@ define(function (require) {
                 var login = new Login();
                 self.updateCurrentView(login);
                 $(login.el).appendTo($content);
+                $(".my-menu").hide();
+            });
+        },
+
+        logout: function () {
+            var self = this;
+            require(["logout/views/view"], function (Logout) {
+                var logout = new Logout();
+                self.updateCurrentView(logout);
+                $(logout.el).appendTo($content);
                 $(".my-menu").hide();
             });
         },

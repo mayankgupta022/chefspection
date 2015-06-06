@@ -1,16 +1,20 @@
-<div id="notesList">
+<div id="chefs">
 	<ul>
+		<li class="listHeading">
+			<div class="col-xs-6">Chef</div>
+			<div class="col-xs-6">Rating</div>
+		</li>
 		<% _.each(models, function(model) { %>
-			<li>
-				<div class="col-xs-6">
-					<a href="#chef/<%= model.attributes.chef_id %>">
-						<%= model.attributes.chef_name %>
-					</a>
-				</div>
-				<div class="col-xs-6">
-					<%= model.attributes.rating %>
-				</div>
-			</li>
+			<a href="#chef/<%= model.attributes.chef_id %>">
+				<li>
+					<div class="col-xs-6">
+							<%= model.attributes.chef_name %>					
+					</div>
+					<div class="col-xs-6">
+						<%= model.attributes.rating %>
+					</div>
+				</li>
+			</a>
 		<% }); %>
 	</ul>
 </div>

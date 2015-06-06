@@ -1,36 +1,30 @@
 <div id="noteDetails" class="form">
 	<div class="row">
-		<label class="col-xs-4">Chef</label>
-		<label class="col-xs-8"><%= chef_name %></label>
+		<label class="col-xs-12"><%= chef_name %></label>
 	</div>
 	<div class="row">
-		<label class="col-xs-4">Ratings</label>
-		<label class="col-xs-8"><%= rating %></label>
+		<label class="col-xs-12"><%= rating %></label>
 	</div>
 	<div class="row">
-		<label class="col-xs-4">Reviews</label>
-		<div class="col-xs-8">
+		<label class="col-xs-12">Reviews</label>
+	</div>
+	<div class="row">
 			<% if(typeof feedback === 'undefined' || feedback.length == 0) { %>
 				No feedback available for this chef.
 			<% } else { %>
-				<ul>
-					<% _.each(feedback, function(model) { %>
-						<li>
-							<div class="col-xs-6">
-								<%= model.feedback %>
-							</div>
-							<label class="col-xs-6">
+				<% _.each(feedback, function(model) { %>
+					<div class="col-xs-6">
+						<div class="review">
+							<label class="row">
 								<%= model.rating %>
 							</label>
-						</li>
-					<% }); %>
-				</ul>
+							<div class="row">
+								<i>"<%= model.feedback %>"</i>
+							</div>
+						</div>
+					</div>
+				<% }); %>
 			<% } %>
-		</div>
-	</div>
-	<div class="row">
-		<button type="submit" class="btn btn-primary" id="submit">Save</button>
-		<button type="delete" class="btn btn-primary" id="delete">Delete</button>
 	</div>
 	<div id="msg"></div>
 </div>

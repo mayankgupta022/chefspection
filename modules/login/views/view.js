@@ -37,7 +37,10 @@ define(function (require) {
 
             this.model.save(null,{
                 success: function (data) {
-                    document.router.navigate("", {trigger: true, replace: true});
+                    if (data.attributes.status !== 1)
+                        document.router.navigate("chefs", {trigger: true, replace: true});
+                    else
+                        $('#msg').html('Failed to login.');
                 },
                 error: function (data) {
                     $('#msg').html('Failed to login.');

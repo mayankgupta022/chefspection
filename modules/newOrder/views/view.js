@@ -4,6 +4,7 @@ define(function (require) {
 
     var Backbone = require('backbone'),
         Model    = require('newOrder/models/model'),
+        Collection  = require('newOrder/collections/collection'),
         tpl      = require('text!newOrder/tpl/tpl.html'),
 
         template = _.template(tpl);
@@ -11,6 +12,7 @@ define(function (require) {
     return Backbone.View.extend({
 
         model: null,
+        collection: null,
 
         initialize: function(options) {
             if(options) {
@@ -19,6 +21,7 @@ define(function (require) {
             }
             else {
                 this.model = new Model();
+                this.fetchDetails();
                 this.render();
             }
         },
@@ -57,7 +60,8 @@ define(function (require) {
         fetchDetails: function() {
             var self = this;
 
-            this.model.fetch({
+            this.collection = new Collection();
+            this.collection.fetch({
                 success: function (data) {
                         self.render();
                 },
@@ -70,7 +74,7 @@ define(function (require) {
         },
 
         render: function () {
-            this.$el.html(template(this.model.attributes));
+            this.$el.html(template(this.collection));
             return this;
         }
  

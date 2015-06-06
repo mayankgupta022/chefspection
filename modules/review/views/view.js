@@ -2,15 +2,17 @@ define(function (require) {
 
     "use strict";
 
-    var Backbone = require('backbone'),
-        Model    = require('review/models/model'),
-        tpl      = require('text!review/tpl/tpl.html'),
+    var Backbone    = require('backbone'),
+        Model       = require('review/models/model'),
+        Collection  = require('review/collections/collection'),
+        tpl         = require('text!review/tpl/tpl.html'),
 
-        template = _.template(tpl);
+        template    = _.template(tpl);
 
     return Backbone.View.extend({
 
         model: null,
+        collection: null,
 
         initialize: function(options) {
             if(options) {
@@ -19,6 +21,7 @@ define(function (require) {
             }
             else {
                 this.model = new Model();
+                this.fetchDetails();
                 this.render();
             }
         },
@@ -59,7 +62,8 @@ define(function (require) {
         fetchDetails: function() {
             var self = this;
 
-            this.model.fetch({
+            this.collection = new Collection();
+            this.collection.fetch({
                 success: function (data) {
                         self.render();
                 },
@@ -72,7 +76,7 @@ define(function (require) {
         },
 
         render: function () {
-            this.$el.html(template(this.model.attributes));
+            this.$el.html(template(this.collection));
             return this;
         }
  

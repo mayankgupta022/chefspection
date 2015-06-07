@@ -52,12 +52,13 @@ def login():
 
 	if request.method == 'POST':
 		restaurant_name=params['restaurant_name']
-		stmt = "SELECT restaurant_id, owner FROM RESTAURANTS where restaurant_name=%s"
-		input=(restaurant_name);
+		password=params['password']
+		stmt = "SELECT restaurant_id, owner FROM RESTAURANTS where restaurant_name=%s and password=%s"
+		input=(restaurant_name, password);
 		cursor.execute(stmt, input)
-		data = cursor.fetchone()		
+		data = cursor.fetchone()
 		if data is None:
-			info = {"status":"Log in failed."}
+			info = {"status":1}
 		else:
 			info = {"status":"Logged in Successfully"}
 			session['owner']=data[1]
@@ -83,8 +84,9 @@ def restaurant():
 	elif request.method == 'POST':
 		restaurant_name=params['restaurant_name']
 		owner=params['owner']
-		stmt = "INSERT INTO RESTAURANTS (restaurant_name, owner) VALUES (%s, %s)"
-		data = (restaurant_name, owner)
+		password=params['password']
+		stmt = "INSERT INTO RESTAURANTS (restaurant_name, owner, password) VALUES (%s, %s, %s)"
+		data = (restaurant_name, owner, password)
 		cursor.execute(stmt, data)
 		id = cursor.lastrowid
 		con.commit()
@@ -106,8 +108,11 @@ def review():
 		restaurant_id = params['restaurant_id']
 		feedback = params['feedback']
 		response = alchemyapi.sentiment('text', params['feedback'])
-		
-		rating = (Decimal(response["docSentiment"]["score"].strip(' "')) + 1)*5
+		log(str(response))
+		if response["status"] == "ERROR" or response["docSentiment"]["type"] == "neutral":
+			rating = 5
+		else:
+			rating = (Decimal(response["docSentiment"]["score"].strip(' "')) + 1)*5
 		log(str(rating))
 		stmt = "UPDATE FEEDBACK SET feedback =%s, rating =%s where order_no=%s and restaurant_id=%s"
 		data = (feedback, rating, order_no, restaurant_id)
@@ -169,21 +174,24 @@ def chefname(chef_id):
 	info = dict()
 
 	if request.method == 'GET':
-		stmt = "SELECT c.chef_id, c.chef_name, c.restaurant_id, f.feedback, f.rating as rating, c.rating as average_rating from FEEDBACK as f, CHEFS as c where c.chef_id=f.chef_id and c.chef_id=%s"
-		input = (chef_id)
-		cursor.execute(stmt, input)
-		data = cursor.fetchall()
-		if data is None or len(data) == 0:
-			stmt = "SELECT chef_name, rating FROM CHEFS where chef_id = %s"
+		if not session:
+			info = {"status": 1}
+		else:
+			stmt = "SELECT c.chef_id, c.chef_name, c.restaurant_id, f.feedback, f.rating as rating, c.rating as average_rating from FEEDBACK as f, CHEFS as c where c.chef_id=f.chef_id and c.chef_id=%s"
 			input = (chef_id)
 			cursor.execute(stmt, input)
-			data = cursor.fetchone()
-			info = {"chef_id" : chef_id, "chef_name": data[0], "rating": str(data[1]), "feedback":[]}
-		else:
-			temp = [{"feedback":item[3], "rating":str(item[4])} for item in data]
-			chef_name=data[0][1]
-			average_rating=data[0][5]
-			info = {"chef_id" : chef_id, "chef_name": chef_name, "rating": str(average_rating), "feedback":temp}
+			data = cursor.fetchall()
+			if data is None or len(data) == 0:
+				stmt = "SELECT chef_name, rating FROM CHEFS where chef_id = %s"
+				input = (chef_id)
+				cursor.execute(stmt, input)
+				data = cursor.fetchone()
+				info = {"chef_id" : chef_id, "chef_name": data[0], "rating": str(data[1]), "feedback":[]}
+			else:
+				temp = [{"feedback":item[3], "rating":str(item[4])} for item in data]
+				chef_name=data[0][1]
+				average_rating=data[0][5]
+				info = {"chef_id" : chef_id, "chef_name": chef_name, "rating": str(average_rating), "feedback":temp}
 	
 	con.close()
 	return Response(json.dumps(info),  mimetype='application/json')
@@ -198,17 +206,20 @@ def order():
 	info = dict()
 
 	if request.method == 'POST':
-		chef_id = params['chef_id']
-		order_no=params['order_no']
-		restaurant_id = session['restaurant_id']
-		owner = session['owner']
+		if not session:
+			info = {"status": 1}
+		else:
+			chef_id = params['chef_id']
+			order_no=params['order_no']
+			restaurant_id = session['restaurant_id']
+			owner = session['owner']
 
-		stmt = "INSERT INTO FEEDBACK (order_no, restaurant_id, chef_id, rating) VALUES (%s, %s, %s, %s)"
-		data = (order_no, restaurant_id, chef_id, "5")
-		cursor.execute(stmt, data)
-		id = cursor.lastrowid
-		con.commit()
-		info = {"owner":owner, "restaurant_id": restaurant_id, "order_no":order_no,  "status": "success"}
+			stmt = "INSERT INTO FEEDBACK (order_no, restaurant_id, chef_id, rating) VALUES (%s, %s, %s, %s)"
+			data = (order_no, restaurant_id, chef_id, "5")
+			cursor.execute(stmt, data)
+			id = cursor.lastrowid
+			con.commit()
+			info = {"owner":owner, "restaurant_id": restaurant_id, "order_no":order_no,  "status": "success"}
 	
 	con.close()
 	return Response(json.dumps(info),  mimetype='application/json')
@@ -226,7 +237,7 @@ def chefs():
 
 	else:
 		restaurant_id = session['restaurant_id']
-		stmt = "SELECT c.chef_id, c.chef_name, c.rating from CHEFS as c where c.restaurant_id=%s"
+		stmt = "SELECT c.chef_id, c.chef_name, c.rating from CHEFS as c where c.restaurant_id=%s ORDER BY c.rating"
 		input = (restaurant_id)
 		cursor.execute(stmt, input)
 		id = cursor.lastrowid
@@ -246,4 +257,5 @@ if __name__ == "__main__":
 	# sess.init_app(app)
 
 
-	app.run()
+	# app.run()
+	app.run(host= '0.0.0.0')

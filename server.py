@@ -12,12 +12,14 @@ cors = CORS(app)
 alchemyapi = AlchemyAPI()
 # sess = Session()
 
+port = int(os.getenv('VCAP_APP_PORT', 5000))
+
 app.secret_key = 'super secret key'
 
-app.config['MYSQL_DATABASE_USER'] = 'user'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'pass'
-app.config['MYSQL_DATABASE_DB'] = 'chefspection'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+app.config['MYSQL_DATABASE_USER'] = 'b8acf770fad374'
+app.config['MYSQL_DATABASE_PASSWORD'] = '0cd5ae1b'
+app.config['MYSQL_DATABASE_DB'] = 'ad_5d17cac02297bd5'
+app.config['MYSQL_DATABASE_HOST'] = 'us-cdbr-iron-east-02.cleardb.net'
 
 mysql.init_app(app)
 
@@ -258,4 +260,4 @@ if __name__ == "__main__":
 
 
 	# app.run()
-	app.run(host= '0.0.0.0')
+	app.run(host= '0.0.0.0', port=port)

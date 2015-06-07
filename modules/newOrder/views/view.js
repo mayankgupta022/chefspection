@@ -20,7 +20,6 @@ define(function (require) {
                 this.fetchDetails();
             }
             else {
-                this.model = new Model();
                 this.fetchDetails();
                 this.render();
             }
@@ -28,7 +27,14 @@ define(function (require) {
 
         events: {
             "click #submit" : "submitDetails",
-            "click #reset" : "resetDetails"
+            "click #reset" : "resetDetails",
+            "keydown input" : "onkeydown"
+        },
+
+        onkeydown: function(e) {
+            var code = e.keyCode || e.which;
+            if(code === 13) 
+                this.submitDetails();
         },
 
         submitDetails: function() {
@@ -36,18 +42,27 @@ define(function (require) {
 
             $('#msg').html('');
 
+            this.model = new Model();
+
             this.model.attributes.order_no = $('#order_no', this.$el).val();
             this.model.attributes.chef_id = $('#chef_id', this.$el).val();
 
-            this.model.save(null,{
-                success: function (data) {
-                    document.router.navigate("", {trigger: true, replace: true});
-                },
-                error: function (data) {
-                    $('#msg').html('Failed to save order.');
-                }
-            });
-
+            if(this.model.attributes.order_no == "")
+                $('#msg').html('Order cannot be left blank');
+            else if(this.model.attributes.chef_id == "")
+                $('#msg').html('Chef cannot be left blank');
+            else {
+                this.model.save(null,{
+                    success: function (data) {
+                        if(data.attributes.status == 1)
+                            document.router.navigate("", {trigger: true, replace: true});
+                        self.resetDetails();
+                    },
+                    error: function (data) {
+                        $('#msg').html('Failed to save order.');
+                    }
+                });
+            }
         },
 
         resetDetails: function() {

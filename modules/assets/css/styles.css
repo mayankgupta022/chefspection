@@ -11,14 +11,20 @@ body {
     display: block;
     background-color: #5bc5a7;
     color: #EEEEEE;
-    font-weight: bold;
+    /*font-weight: bold;*/
     padding-top: 10px;
     font-size: 24px;
     height: 50px;
 }
 
+.header>span>span {
+    color: #EC361E;
+    font-size: 28px;
+    font-weight: bold;
+}
+
 .my-menu {
-	padding-top: 10px;
+	/*padding-top: 10px;*/
     height: 40px;
 }
 
@@ -90,8 +96,76 @@ a, a:hover {
 .review {
     background-color: #f8f8f8;
     padding: 10px 20px 10px 20px;
+    margin-bottom: 8px;
 }
 
 .review .row {
     padding: 10px;
+}
+
+.logout {
+    display: block;
+    width: 30px;
+    height: 30px;
+    background: url('../../../modules/assets/img/logout.png');
+    background-size: contain;
+    margin: auto;
+}
+
+.all-chefs {
+    display: block;
+    width: 40px;
+    height: 40px;
+    background: url('../../../modules/assets/img/hat_all.png');
+    background-size: contain;
+    margin: auto;
+}
+
+.new-chef {
+    display: block;
+    width: 40px;
+    height: 40px;
+    background: url('../../../modules/assets/img/hat_new.png');
+    background-size: contain;
+    margin: auto;
+}
+
+.new-order {
+    display: block;
+    width: 30px;
+    height: 30px;
+    background: url('../../../modules/assets/img/order_new.png');
+    background-size: contain;
+    margin: auto;
+    margin-top: 5px;
+}
+
+.hat-full {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: url('../../../modules/assets/img/hat_filled.png');
+    background-size: contain;
+    margin: auto;
+    margin-top: 5px;    
+}
+
+.hat-half {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: url('../../../modules/assets/img/hat_half.png');
+    background-size: contain;
+    margin: auto;
+    margin-top: 5px;    
+}
+
+.hat-empty {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: url('../../../modules/assets/img/hat_empty.png');
+    background-size: contain;
+    margin: auto;
+    margin-top: 5px;    
 }

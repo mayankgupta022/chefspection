@@ -17,15 +17,21 @@ define(function (require) {
                 this.model = new Model(options);
                 this.fetchDetails();
             }
-            else {
-                this.model = new Model();
+            else {                
                 this.render();
             }
         },
 
         events: {
             "click #submit" : "submitDetails",
-            "click #reset" : "resetDetails"
+            "click #reset" : "resetDetails",
+            "keydown input" : "onkeydown"
+        },
+
+        onkeydown: function(e) {
+            var code = e.keyCode || e.which;
+            if(code === 13) 
+                this.submitDetails();
         },
 
         submitDetails: function() {
@@ -33,18 +39,28 @@ define(function (require) {
 
             $('#msg').html('');
 
+            this.model = new Model();
+
             this.model.attributes.restaurant_name = $('#restaurant_name', this.$el).val();
             this.model.attributes.owner = $('#owner', this.$el).val();
+            this.model.attributes.password = $('#password', this.$el).val();
 
-            this.model.save(null,{
-                success: function (data) {
-                    document.router.navigate("", {trigger: true, replace: true});
-                },
-                error: function (data) {
-                    $('#msg').html('Failed to save restaurant.');
-                }
-            });
-
+            if(this.model.attributes.restaurant_name == "")
+                $('#msg').html('Restaurant cannot be left blank');
+            else if(this.model.attributes.owner == "")
+                $('#msg').html('Manager cannot be left blank');
+            else if(this.model.attributes.password == "")
+                $('#msg').html('Password cannot be left blank');
+            else {
+                this.model.save(null,{
+                    success: function (data) {                    
+                        self.resetDetails();
+                    },
+                    error: function (data) {
+                        $('#msg').html('Failed to save restaurant.');
+                    }
+                });
+            }
         },
 
         resetDetails: function() {
@@ -70,7 +86,7 @@ define(function (require) {
         },
 
         render: function () {
-            this.$el.html(template(this.model.attributes));
+            this.$el.html(template());
             return this;
         }
  

@@ -22,6 +22,9 @@ define(function (require) {
             this.collection = new Collection();
             this.collection.fetch({
                 success: function (data) {
+                    if(data.models.length!=0 && data.models[0].attributes.status == 1)
+                        document.router.navigate("", {trigger: true, replace: true});
+                    else
                         self.$el.html(template(self.collection));
                 },
                 error: function (data, response, options) {

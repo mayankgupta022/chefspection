@@ -25,7 +25,14 @@ define(function (require) {
 
         events: {
             "click #submit" : "submitDetails",
-            "click #reset" : "resetDetails"
+            "click #reset" : "resetDetails",
+            "keydown input" : "onkeydown"
+        },
+
+        onkeydown: function(e) {
+            var code = e.keyCode || e.which;
+            if(code === 13) 
+                this.submitDetails();
         },
 
         submitDetails: function() {
@@ -35,15 +42,21 @@ define(function (require) {
 
             this.model.attributes.chef_name = $('#chef_name', this.$el).val();
 
-            this.model.save(null,{
-                success: function (data) {
-                    document.router.navigate("", {trigger: true, replace: true});
-                },
-                error: function (data) {
-                    $('#msg').html('Failed to save chef.');
-                }
-            });
-
+            if(this.model.attributes.chef_name == "")
+                $('#msg').html('Chef cannot be left blank');
+            else {
+                this.model.save(null,{
+                    success: function (data) {
+                        if(data.attributes.status == 1)
+                            document.router.navigate("", {trigger: true, replace: true});
+                        else
+                            document.router.navigate("chefs", {trigger: true, replace: true});
+                    },
+                    error: function (data) {
+                        $('#msg').html('Failed to save chef.');
+                    }
+                });
+            }
         },
 
         resetDetails: function() {

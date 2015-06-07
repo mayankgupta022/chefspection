@@ -19,8 +19,7 @@ define(function (require) {
                 this.model = new Model(options);
                 this.fetchDetails();
             }
-            else {
-                this.model = new Model();
+            else {                
                 this.fetchDetails();
                 this.render();
             }
@@ -28,7 +27,14 @@ define(function (require) {
 
         events: {
             "click #submit" : "submitDetails",
-            "click #reset" : "resetDetails"
+            "click #reset" : "resetDetails",
+            "keydown input" : "onkeydown"
+        },
+
+        onkeydown: function(e) {
+            var code = e.keyCode || e.which;
+            if(code === 13) 
+                this.submitDetails();
         },
 
         submitDetails: function() {
@@ -36,18 +42,28 @@ define(function (require) {
 
             $('#msg').html('');
 
+            this.model = new Model();
+
             this.model.attributes.order_no = $('#order_no', this.$el).val();
             this.model.attributes.restaurant_id = $('#restaurant_id', this.$el).val();
             this.model.attributes.feedback = $('#feedback', this.$el).val();
 
-            this.model.save(null,{
-                success: function (data) {
-                    document.router.navigate("", {trigger: true, replace: true});
-                },
-                error: function (data) {
-                    $('#msg').html('Failed to save review.');
-                }
-            });
+            if(this.model.attributes.order_no == "")
+                $('#msg').html('Order cannot be left blank');
+            else if(this.model.attributes.restaurant_id == "")
+                $('#msg').html('Restaurant cannot be left blank');
+            else if(this.model.attributes.feedback == "")
+                $('#msg').html('Feedback cannot be left blank');
+            else {
+                this.model.save(null,{
+                    success: function (data) {
+                        self.resetDetails();
+                    },
+                    error: function (data) {
+                        $('#msg').html('Failed to save review.');
+                    }
+                });
+            }
 
         },
 

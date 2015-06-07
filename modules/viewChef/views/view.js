@@ -28,7 +28,10 @@ define(function (require) {
 
             this.model.fetch({
                 success: function (data) {
+                    if (data.attributes.status !== 1)
                         self.render();
+                    else
+                        document.router.navigate("", {trigger: true, replace: true});
                 },
                 error: function (data) {
                     self.render();

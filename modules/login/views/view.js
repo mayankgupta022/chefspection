@@ -34,18 +34,25 @@ define(function (require) {
             $('#msg').html('');
 
             this.model.attributes.restaurant_name = $('#restaurant_name', this.$el).val();
+            this.model.attributes.password = $('#password', this.$el).val();
 
-            this.model.save(null,{
-                success: function (data) {
-                    if (data.attributes.status !== 1)
-                        document.router.navigate("chefs", {trigger: true, replace: true});
-                    else
+            if(this.model.attributes.restaurant_name == "")
+                $('#msg').html('Restaurant cannot be left blank');
+            else if(this.model.attributes.password == "")
+                $('#msg').html('Password cannot be left blank');
+            else {
+                this.model.save(null,{
+                    success: function (data) {
+                        if (data.attributes.status !== 1)
+                            document.router.navigate("chefs", {trigger: true, replace: true});
+                        else
+                            $('#msg').html('Failed to login.');
+                    },
+                    error: function (data) {
                         $('#msg').html('Failed to login.');
-                },
-                error: function (data) {
-                    $('#msg').html('Failed to login.');
-                }
-            });
+                    }
+                });
+            }
 
         },
 

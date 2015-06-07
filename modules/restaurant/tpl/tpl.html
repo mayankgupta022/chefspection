@@ -1,11 +1,15 @@
 <div id="login" class="form">
 	<div class="row">
 		<label class="col-xs-4">Restaurant</label>
-		<input type="text" class="col-xs-8" <% if(typeof restaurant_name!== 'undefined') { %> value="<%= restaurant_name %>" <% } %> name="restaurant_name" id="restaurant_name"/>
+		<input type="text" class="col-xs-8" name="restaurant_name" id="restaurant_name"/>
 	</div>
 	<div class="row">
 		<label class="col-xs-4">Manager</label>
-		<input type="text" class="col-xs-8" <% if(typeof owner!== 'undefined') { %> value="<%= owner %>" <% } %> name="owner" id="owner"/>
+		<input type="text" class="col-xs-8" name="owner" id="owner"/>
+	</div>
+	<div class="row">
+		<label class="col-xs-4">Password</label>
+		<input type="password" class="col-xs-8" name="password" id="password"/>
 	</div>
 	<br />
 	<div class="row">

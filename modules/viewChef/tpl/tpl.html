@@ -1,9 +1,21 @@
 <div id="noteDetails" class="form">
 	<div class="row">
-		<label class="col-xs-12"><%= chef_name %></label>
+		<label class="col-xs-4">Chef</label>
+		<label class="col-xs-8"><%= chef_name %></label>
 	</div>
 	<div class="row">
-		<label class="col-xs-12"><%= rating %></label>
+		<label class="col-xs-4">Overall Rating</label>
+		<label class="col-xs-8">
+			<% for(i=0;i<Math.floor(rating/2);i++) { %>
+				<div class="hat-full"></div>
+			<% } %>
+			<% if(rating%2) { %>
+				<div class="hat-half"></div>
+			<% } %>
+			<% for(i=0;i<Math.floor((10 - rating)/2);i++) { %>
+				<div class="hat-empty"></div>
+			<% } %>	
+		</label>
 	</div>
 	<div class="row">
 		<label class="col-xs-12">Reviews</label>
@@ -13,18 +25,30 @@
 				No feedback available for this chef.
 			<% } else { %>
 				<% _.each(feedback, function(model) { %>
-					<div class="col-xs-6">
-						<div class="review">
-							<label class="row">
-								<%= model.rating %>
-							</label>
-							<div class="row">
-								<i>"<%= model.feedback %>"</i>
+					<% if(model.feedback !=="") { %>
+						<div class="col-xs-6">
+							<div class="review">
+								<label class="row">
+									<% for(i=0;i<Math.floor(model.rating/2);i++) { %>
+										<div class="hat-full"></div>
+									<% } %>
+									<% if(model.rating%2) { %>
+										<div class="hat-half"></div>
+									<% } %>
+									<% for(i=0;i<Math.floor((10 - model.rating)/2);i++) { %>
+										<div class="hat-empty"></div>
+									<% } %>									
+								</label>
+								<div class="row">
+									<i>"<%= model.feedback %>"</i>
+								</div>
 							</div>
 						</div>
-					</div>
+					<% } %>
 				<% }); %>
 			<% } %>
 	</div>
 	<div id="msg"></div>
+	<br />
+	<div>* Unrated orders will get default rating (5).</div>
 </div>

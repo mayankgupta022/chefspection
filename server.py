@@ -4,6 +4,7 @@ from flask.ext.cors import CORS
 import json
 from decimal import Decimal
 from alchemyapi import AlchemyAPI
+import os
 # from flask.ext.session import Session 
 
 mysql = MySQL()
